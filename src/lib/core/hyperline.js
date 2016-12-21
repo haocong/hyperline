@@ -7,11 +7,14 @@ export const hyperlineFactory = (React) => {
       alignItems: 'center',
       position: 'absolute',
       overflow: 'hidden',
-      bottom: 0,
-      width: '100%',
+      left: 1,
+      bottom: 1,
+      width: 'calc(100% - 2px)',
       height: '18px',
       font: 'bold 12px Monospace',
       pointerEvents: 'none',
+      borderBottomLeftRadius: 5,
+      borderBottomRightRadius: 5,
       fontFamily,
       background: background || Color(colors.black).darken(0.1).hslString()
     }

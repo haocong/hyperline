@@ -1,4 +1,4 @@
-import publicIp from 'public-ip'
+import publicIp from 'ip'
 import { iconStyles } from '../utils/icons'
 import { colorExists } from '../utils/colors'
 import pluginWrapperFactory from '../core/PluginWrapper'
@@ -33,21 +33,11 @@ export function componentFactory(React, colors) {
       super(props)
 
       this.state = {ip: '?.?.?.?'}
-      publicIp.v4().then(ip => {
-        this.setState({ip: ip})
-      })
+      process.nextTick(() => this.setState({ip: publicIp.address()}))
     }
 
     componentDidMount() {
-      this.interval = setInterval(() => (
-        publicIp.v4()
-        .then(ip => {
-          this.setState({ip: ip})
-        })
-        .catch(() => {
-          this.setState({ip: '?.?.?.?'})
-        })
-      ), 60000 * 5)
+      this.interval = setInterval(() => this.setState({ip: publicIp.address()}), 60000 * 5)
     }
 
     componentWillUnmount() {
