@@ -4,6 +4,8 @@ import { colorExists } from '../utils/colors'
 import pluginWrapperFactory from '../core/PluginWrapper'
 
 export function componentFactory(React, colors) {
+  const {Component, PropTypes} = React
+
   const PluginIcon = ({ fillColor }) => (
     <svg style={iconStyles} xmlns="http://www.w3.org/2000/svg">
       <g fill="none" fillRule="evenodd">
@@ -15,10 +17,10 @@ export function componentFactory(React, colors) {
   )
 
   PluginIcon.propTypes = {
-    fillColor: React.PropTypes.string
+    fillColor: PropTypes.string
   }
 
-  return class extends React.Component {
+  return class extends Component {
     static displayName() {
       return 'IP Address plugin'
     }
@@ -32,12 +34,13 @@ export function componentFactory(React, colors) {
     constructor(props) {
       super(props)
 
-      this.state = {ip: '?.?.?.?'}
-      process.nextTick(() => this.setState({ip: publicIp.address()}))
+      this.state = {ip: publicIp.address() || '?.?.?.?'}
     }
 
     componentDidMount() {
-      this.interval = setInterval(() => this.setState({ip: publicIp.address()}), 60000 * 5)
+      this.interval = setInterval(() => {
+        this.setState({ip: publicIp.address()})
+      }, 60000 * 5)
     }
 
     componentWillUnmount() {
